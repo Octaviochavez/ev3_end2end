@@ -4,7 +4,7 @@ import requests
 import pickle
 import matplotlib.pyplot as plt
 
-st.title("Segmentación de clientes")
+st.title("Segmentación de Usuarios")
 
 # Obtiene los datos para la visualización
 respuesta = requests.get(
