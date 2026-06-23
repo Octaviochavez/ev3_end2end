@@ -10,4 +10,4 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
     - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    - ./database/perfil_cliente.csv:/docker-entrypoint-initdb.d/perfil_cliente.csv
+    - ./database/perfil_usuarios.csv:/docker-entrypoint-initdb.d/perfil_usuarios.csv
