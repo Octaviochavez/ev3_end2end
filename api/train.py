@@ -17,7 +17,13 @@ from kneed import KneeLocator
 os.makedirs("models", exist_ok=True)
 
 usuarios = pd.read_csv("data/usuarios_streaming.csv")
-engine = create_engine("postgresql://admin:admin@postgres:5432/crm_usuarios")
+
+DB_USER = os.getenv("POSTGRES_USER", "admin")
+DB_PASS = os.getenv("POSTGRES_PASSWORD", "duoc2026").strip()
+DB_NAME = os.getenv("POSTGRES_DB", "analisis_streaming").strip()
+DB_PORT = os.getenv("POSTGRES_PORT", "5432").strip()
+
+engine = create_engine(f"postgresql://{DB_USER}:{DB_PASS}@postgres:{DB_PORT}/{DB_NAME}")
 
 perfiles = pd.read_sql(
     """
