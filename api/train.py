@@ -17,8 +17,15 @@ from kneed import KneeLocator
 os.makedirs("models", exist_ok=True)
 
 usuarios = pd.read_csv("data/usuarios_streaming.csv")
-perfiles = pd.read_csv("data/perfil_usuarios.csv")
+engine = create_engine("postgresql://admin:admin@postgres:5432/crm_clientes")
 
+perfiles = pd.read_sql(
+    """
+    SELECT *
+    FROM perfil_cliente
+    """,
+    engine
+)
 data = pd.merge(usuarios, perfiles, on="id_cliente")
 
 scaler = StandardScaler()
