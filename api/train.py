@@ -17,16 +17,19 @@ from kneed import KneeLocator
 os.makedirs("models", exist_ok=True)
 
 usuarios = pd.read_csv("data/usuarios_streaming.csv")
-engine = create_engine("postgresql://admin:admin@postgres:5432/crm_clientes")
+engine = create_engine("postgresql://admin:admin@postgres:5432/crm_usuarios")
 
 perfiles = pd.read_sql(
     """
     SELECT *
-    FROM perfil_cliente
+    FROM perfil_usuarios
     """,
     engine
 )
 data = pd.merge(usuarios, perfiles, on="id_cliente")
+
+# Guarda el archivo con la data integrada
+data.to_csv("data/data_usuarios.csv", index=False)
 
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(data.drop(columns=["id_cliente"]))
@@ -60,12 +63,12 @@ componentes = pca.fit_transform(X_scaled)
 data["pc1"] = componentes[:, 0]
 data["pc2"] = componentes[:, 1]
 
-data.to_csv("data/clientes_segmentados.csv", index=False)
+data.to_csv("data/usuarios_segmentados.csv", index=False)
 
 metricas = {
     "k_optimo": int(k_optimo),
     "silhouette_score": silhouette_score(X_scaled, data["cluster"]),
-    "n_clientes": int(len(data)),
+    "n_usuarios": int(len(data)),
     "n_clusters": int(k_optimo),
     "varianza_pca": float(
         pca.explained_variance_ratio_.sum()
