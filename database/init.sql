@@ -1,15 +1,16 @@
 -- 1. Crear la tabla para el Perfil de usuarios
 create table if not exists perfil_usuario (
-   id_usuario            varchar(50) primary key,
-   edad                  INT,
-   genero                varchar(20),
-   pais                  varchar(50),
-   dispositivo_principal varchar(50),
-   fecha_registro        date
+   id_cliente                              INT PRIMARY KEY,
+   edad                                    NUMERIC,
+   dispositivos_registrados                NUMERIC,
+   porcentaje_uso_app_movil                NUMERIC,
+   cantidad_perfiles_creados               NUMERIC,
+   interacciones_mensuales_soporte         NUMERIC,
+   distancia_promedio_red_km               NUMERIC
 );
 
 
-COPY perfil_usuario(id_usuario,edad,genero,pais,dispositivo_principal,fecha_registro)
-FROM '/docker-entrypoint-initdb.d/perfil_cliente.csv'
+COPY perfil_usuario()
+FROM '/docker-entrypoint-initdb.d/perfil_usuarios.csv'
 DELIMITER ','
 CSV HEADER;
