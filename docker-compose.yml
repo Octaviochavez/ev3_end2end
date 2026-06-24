@@ -11,9 +11,9 @@ services:
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/perfil_usuarios.csv:/docker-entrypoint-initdb.d/perfil_usuarios.csv
-  ml-service:
+  api:
     build:
-      context: ./ml-service
+      context: ./api
     ports:
       - "8000:8000"
     volumes:
@@ -30,6 +30,6 @@ services:
       - ./data:/app/data  
       - modelos:/app/models          
     depends_on:
-      - ml-service
+      - api
 volumes:
   modelos:
