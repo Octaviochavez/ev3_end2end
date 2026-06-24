@@ -8,7 +8,7 @@ st.title("Segmentación de Usuarios")
 
 # Obtiene los datos para la visualización
 respuesta = requests.get(
-    "http://ml-service:8000/dashboard-data"
+    "http://api:8000/dashboard-data"
 )
 
 payload = respuesta.json()
