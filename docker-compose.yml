@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:16
-    container_name: streaming_postgres_db
+    container_name: crm_database
     environment:
-      - POSTGRES_USER: ${POSTGRES_USER}
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      - POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
@@ -16,6 +16,8 @@ services:
       context: ./api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     volumes:
       - ./data:/app/data
       - modelos:/app/models      
@@ -23,7 +25,7 @@ services:
       - postgres
   dashboard:
     build:
-      context: ./dashboard
+      context: ./dashboards
     ports:
       - "8501:8501"
     volumes:
