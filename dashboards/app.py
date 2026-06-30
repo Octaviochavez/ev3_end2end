@@ -20,31 +20,51 @@ centroides = pd.DataFrame(payload["centroides"])
 # Muestra las métricas del modelo
 st.subheader("Métricas del modelo")
 
+# Filtro interactivo por segmento
+st.markdown("**Filtrar por Cluster:**")
+lista_clusters = sorted(data["cluster"].unique())
+clusters_seleccionados = []
+
+columnas_filtros = st.columns(len(lista_clusters))
+
+for i, cluster in enumerate(lista_clusters):
+    with columnas_filtros[i]:
+        # value=True mantiene los clusters seleccionados por defecto al cargar
+        if st.checkbox(f"Cluster {cluster}", value=True):
+            clusters_seleccionados.append(cluster)
+
+if not clusters_seleccionados:
+    st.warning("Ningún cluster seleccionado.")
+    data_filtrada = pd.DataFrame(columns=data.columns) # Data vacía
+else:
+    # Creamos la data filtrada basada en la selección
+    data_filtrada = data[data["cluster"].isin(clusters_seleccionados)]
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric(
-        "Silhouette Score",
+        "Silhouette Score Global",
         f"{metricas['silhouette_score']:.3f}"
     )
 
 with col2:
     st.metric(
-        "Clusters",
-        metricas["n_clusters"]
+        "Clusters Seleccionados",
+        len(clusters_seleccionados)
     )
 
 with col3:
     st.metric(
-        "Usuarios",
-        metricas["n_usuarios"]
+        "Usuarios en Selección",
+        len(data_filtrada)
     )
 
 st.subheader("Usuarios segmentados")
-st.dataframe(data)
-st.subheader("Distribución de segmentos")
+st.dataframe(data_filtrada) 
 
-st.bar_chart(data["cluster"].value_counts())
+st.subheader("Distribución de segmentos")
+st.bar_chart(data_filtrada["cluster"].value_counts()) 
 
 # Perfil de cada segmento
 perfil_segmentos = data.groupby("cluster").agg(
@@ -70,11 +90,11 @@ st.subheader("Perfil de segmentos (Mapa de Calor)")
 # Aplica un gradiente de color a la tabla para convertirla en un mapa de calor visual
 st.dataframe(perfil_segmentos.style.background_gradient(cmap='Blues', axis=0))
 
-# Grafica resultados de PCA
+# Grafica resultados de PCA interactivo
 fig, ax = plt.subplots(figsize=(8, 6))
 
-for cluster in sorted(data["cluster"].unique()):
-    subset = data[data["cluster"] == cluster]
+for cluster in sorted(data_filtrada["cluster"].unique()): 
+    subset = data_filtrada[data_filtrada["cluster"] == cluster]
     ax.scatter(subset["pc1"], subset["pc2"], label=f"Cluster {cluster}", alpha=0.7)
 
 ax.set_title("Visualización PCA de los segmentos", fontsize=14, fontweight="bold")
