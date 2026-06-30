@@ -66,8 +66,9 @@ perfil_segmentos = data.groupby("cluster").agg(
     antiguedad_cliente_meses=("antiguedad_cliente_meses", "mean")
 ).round(2)
 
-st.subheader("Perfil de segmentos")
-st.dataframe(perfil_segmentos)
+st.subheader("Perfil de segmentos (Mapa de Calor)")
+# Aplica un gradiente de color a la tabla para convertirla en un mapa de calor visual
+st.dataframe(perfil_segmentos.style.background_gradient(cmap='Blues', axis=0))
 
 # Grafica resultados de PCA
 fig, ax = plt.subplots(figsize=(8, 6))
@@ -93,11 +94,17 @@ centroides = pd.DataFrame(
     payload["centroides"]
 )
 st.subheader("Visualización de segmentos usando 2 características")
-# Escoger dos columnas que se incluirán en el análisis
-columna_x = 'horas_consumo_mensual'
-columna_y = 'gasto_mensual'
-fig, ax = plt.subplots(figsize=(8,6))
 
+# Escoger dos columnas que se incluirán en el análisis de forma interactiva
+columnas_numericas = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
+
+col1, col2 = st.columns(2)
+with col1:
+    columna_x = st.selectbox("Selecciona Eje X", columnas_numericas, index=columnas_numericas.index('horas_consumo_mensual'))
+with col2:
+    columna_y = st.selectbox("Selecciona Eje Y", columnas_numericas, index=columnas_numericas.index('gasto_mensual'))
+
+fig, ax = plt.subplots(figsize=(8,6))
 scatter = ax.scatter(
     data[columna_x],
     data[columna_y],
