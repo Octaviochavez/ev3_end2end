@@ -115,8 +115,9 @@ centroides = pd.DataFrame(
 )
 st.subheader("Visualización de segmentos usando 2 características")
 
-# Escoger dos columnas que se incluirán en el análisis de forma interactiva
-columnas_numericas = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
+# Escoge solo columnas que existan en ambas tablas y excluye identificadores
+columnas_numericas = [col for col in data.select_dtypes(include=['float64', 'int64']).columns 
+                      if col in centroides.columns and col not in ['cluster', 'id_cliente']]
 
 col1, col2 = st.columns(2)
 with col1:
