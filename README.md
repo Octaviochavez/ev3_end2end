@@ -1,6 +1,6 @@
 # Segmentación de clientes con Machine Learning
 
-## Evaluación N°3 Programación para la base de datos: Construir una solución End-to-end.
+## Evaluación N°3 Programación para la Ciencia de Datos: Construir una solución End-to-end.
 
 **Integrantes:**
 
@@ -10,7 +10,7 @@
 
 **Asignatura:**
 
-- Programación para la base de datos
+- Programación para la Ciencia de Datos
 
 **Docente:**
 
